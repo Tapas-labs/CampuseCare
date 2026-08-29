@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}My Complaints{% endblock %}
+{% block content %}
+
+<section class="section" style="margin-top:30px">
+  <div class="heading">
+    <div>
+      <span class="label">STUDENT DASHBOARD</span>
+      <h2>YOUR COMPLAINTS.</h2>
+    </div>
+    <span class="number">{{ '%02d'|format(stats.total) }}</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>{{ '%02d'|format(stats.total) }}</b><span>TOTAL</span></div>
+    <div class="stat pending"><b>{{ '%02d'|format(stats.pending) }}</b><span>PENDING</span></div>
+    <div class="stat progress"><b>{{ '%02d'|format(stats.in_progress) }}</b><span>IN PROGRESS</span></div>
+    <div class="stat resolved"><b>{{ '%02d'|format(stats.resolved) }}</b><span>RESOLVED</span></div>
+  </div>
+
+  <div class="panel">
+    <h3>📝 REPORT A NEW PROBLEM</h3>
+    <form method="POST" action="{{ url_for('submit_complaint') }}">
+      <div class="field">
+        <label for="title">TITLE</label>
+        <input type="text" id="title" name="title" placeholder="e.g. Wi-Fi not working in Hostel Block B" required>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="category">CATEGORY</label>
+          <select id="category" name="category">
+            {% for cat in categories %}
+              <option value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label for="priority">PRIORITY</label>
+          <select id="priority" name="priority">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="description">DESCRIBE THE PROBLEM</label>
+        <textarea id="description" name="description" rows="4" placeholder="Give as much detail as possible..." required></textarea>
+      </div>
+      <button type="submit" class="btn yellow">SUBMIT COMPLAINT →</button>
+    </form>
+  </div>
+
+  {% if complaints|length == 0 %}
+    <div class="empty">
+      <span class="label">NO COMPLAINTS YET</span>
+      <h3>ALL QUIET ON CAMPUS.</h3>
+      <p>You haven't reported anything yet. Use the form above the moment something needs fixing.</p>
+    </div>
+  {% else %}
+    <div class="complaint-grid">
+      {% for c in complaints %}
+        <div class="complaint-card">
+          <div class="complaint-top">
+            <div>
+              <p class="complaint-title">{{ c['title'] }}</p>
+              <div class="complaint-meta">Filed on {{ c['created_at'] }} • Complaint #{{ c['id'] }}</div>
+            </div>
+            <span class="status-badge status-{{ c['status'].replace(' ', '-') }}">{{ c['status'] }}</span>
+          </div>
+          <div class="tag-row">
+            <span class="tag category">{{ c['category'] }}</span>
+            <span class="tag priority-{{ c['priority'] }}">{{ c['priority'] }} PRIORITY</span>
+          </div>
+          <p class="complaint-desc">{{ c['description'] }}</p>
+          {% if c['admin_remarks'] %}
+            <div class="remarks-box"><b>Admin remarks:</b> {{ c['admin_remarks'] }}</div>
+          {% endif %}
+          {% if c['status'] == 'Pending' %}
+            <form method="POST" action="{{ url_for('delete_complaint', complaint_id=c['id']) }}" onsubmit="return confirm('Delete this complaint?');">
+              <button type="submit" class="btn small ghost">DELETE</button>
+            </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}

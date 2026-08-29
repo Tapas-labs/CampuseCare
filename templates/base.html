@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}CampusCare{% endblock %} — Complaint & Service Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="header">
+  <a class="brand" href="{{ url_for('index') }}">
+    <span class="mark">CC</span>
+    <div>
+      <b>CAMPUS<span>CARE</span></b>
+      <small>REPORT • TRACK • RESOLVE</small>
+    </div>
+  </a>
+  <nav class="nav">
+    {% if logged_in_user %}
+      {% if logged_in_user['role'] == 'student' %}
+        <span class="pill">HEY, {{ logged_in_user['name'].upper() }}!</span>
+        <a class="nav-link" href="{{ url_for('student_dashboard') }}">MY COMPLAINTS</a>
+      {% else %}
+        <span class="pill pill-admin">ADMIN MODE</span>
+        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">DASHBOARD</a>
+      {% endif %}
+      <a class="nav-link logout" href="{{ url_for('logout') }}">LOGOUT ⏻</a>
+    {% else %}
+      <a class="nav-link" href="{{ url_for('login') }}">LOGIN</a>
+      <a class="nav-link nav-cta" href="{{ url_for('register') }}">SIGN UP</a>
+    {% endif %}
+  </nav>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-wrap">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          <span>{{ message }}</span>
+          <button class="flash-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="mark small">CC</span>
+    <p>CampusCare — built as an ICT mini-project. HTML • CSS • JS • Python (Flask) • SQL (SQLite). No external APIs, no frameworks, no payments — just fundamentals.</p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

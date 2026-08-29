@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <span class="label">WELCOME BACK</span>
+    <h2>LOGIN.</h2>
+    <div class="tagline">ACCESS YOUR DASHBOARD</div>
+
+    <form method="POST" action="{{ url_for('login') }}">
+      <div class="field">
+        <label for="email">EMAIL</label>
+        <input type="email" id="email" name="email" placeholder="you@college.edu" required>
+      </div>
+      <div class="field">
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn red full">LOGIN →</button>
+    </form>
+
+    <p class="auth-switch">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+
+    <div class="demo-box">
+      <b>DEMO ADMIN LOGIN</b><br>
+      email: admin@campuscare.edu<br>
+      password: admin123
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+<section class="section" style="margin-top:30px">
+  <div class="heading">
+    <div>
+      <span class="label red">ADMIN DASHBOARD</span>
+      <h2>ALL COMPLAINTS.</h2>
+    </div>
+    <span class="number">{{ '%02d'|format(stats.total) }}</span>
+  </div>
+
+  <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+    <div class="stat"><b>{{ '%02d'|format(stats.total) }}</b><span>TOTAL</span></div>
+    <div class="stat pending"><b>{{ '%02d'|format(stats.pending) }}</b><span>PENDING</span></div>
+    <div class="stat progress"><b>{{ '%02d'|format(stats.in_progress) }}</b><span>IN PROGRESS</span></div>
+    <div class="stat resolved"><b>{{ '%02d'|format(stats.resolved) }}</b><span>RESOLVED</span></div>
+    <div class="stat rejected"><b>{{ '%02d'|format(stats.rejected) }}</b><span>REJECTED</span></div>
+  </div>
+
+  <form method="GET" action="{{ url_for('admin_dashboard') }}" class="filters">
+    <select name="status" onchange="this.form.submit()">
+      <option value="All" {% if status_filter=='All' %}selected{% endif %}>ALL STATUSES</option>
+      {% for s in statuses %}
+        <option value="{{ s }}" {% if status_filter==s %}selected{% endif %}>{{ s.upper() }}</option>
+      {% endfor %}
+    </select>
+    <select name="category" onchange="this.form.submit()">
+      <option value="All" {% if category_filter=='All' %}selected{% endif %}>ALL CATEGORIES</option>
+      {% for cat in categories %}
+        <option value="{{ cat }}" {% if category_filter==cat %}selected{% endif %}>{{ cat.upper() }}</option>
+      {% endfor %}
+    </select>
+  </form>
+
+  {% if complaints|length == 0 %}
+    <div class="empty">
+      <span class="label">NOTHING HERE</span>
+      <h3>NO COMPLAINTS FOUND.</h3>
+      <p>Try changing the filters, or check back once students start reporting issues.</p>
+    </div>
+  {% else %}
+    <div class="complaint-grid">
+      {% for c in complaints %}
+        <div class="complaint-card">
+          <div class="complaint-top">
+            <div>
+              <p class="complaint-title">{{ c['title'] }}</p>
+              <div class="complaint-meta">
+                By {{ c['student_name'] }}{% if c['student_enrollment'] %} ({{ c['student_enrollment'] }}){% endif %}
+                • {{ c['student_email'] }} • Filed {{ c['created_at'] }} • Complaint #{{ c['id'] }}
+              </div>
+            </div>
+            <span class="status-badge status-{{ c['status'].replace(' ', '-') }}">{{ c['status'] }}</span>
+          </div>
+          <div class="tag-row">
+            <span class="tag category">{{ c['category'] }}</span>
+            <span class="tag priority-{{ c['priority'] }}">{{ c['priority'] }} PRIORITY</span>
+          </div>
+          <p class="complaint-desc">{{ c['description'] }}</p>
+          {% if c['admin_remarks'] %}
+            <div class="remarks-box"><b>Previous remarks:</b> {{ c['admin_remarks'] }}</div>
+          {% endif %}
+
+          <form method="POST" action="{{ url_for('update_complaint', complaint_id=c['id']) }}" class="admin-form">
+            <select name="status">
+              {% for s in statuses %}
+                <option value="{{ s }}" {% if c['status']==s %}selected{% endif %}>{{ s }}</option>
+              {% endfor %}
+            </select>
+            <input type="text" name="admin_remarks" placeholder="Add a remark (optional)" value="{{ c['admin_remarks'] or '' }}">
+            <button type="submit" class="btn small blue">UPDATE →</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}

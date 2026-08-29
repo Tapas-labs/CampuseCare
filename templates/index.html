@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-copy">
+    <span class="label">ISSUE #001 • CAMPUS PROBLEMS SOLVED</span>
+    <h1 class="display">CAMPUS<br><em>CARE</em>!</h1>
+    <div class="tagline">REPORT. TRACK.<br>RESOLVE.</div>
+    <p>A no-nonsense complaint & service management system for your college. Students report a problem in seconds, admins track and resolve it — no paper forms, no running around offices.</p>
+    <div class="hero-buttons">
+      <a class="btn red" href="{{ url_for('register') }}">GET STARTED →</a>
+      <a class="btn ghost" href="{{ url_for('login') }}">I ALREADY HAVE AN ACCOUNT</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <div class="speech">EVERY PROBLEM<br>DESERVES A FIX.</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="heading">
+    <div>
+      <span class="label red">HOW IT WORKS</span>
+      <h2>THREE STEPS. ZERO HASSLE.</h2>
+    </div>
+    <span class="number">01</span>
+  </div>
+  <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat">
+      <b>01</b>
+      <span>STUDENT REPORTS A PROBLEM</span>
+    </div>
+    <div class="stat">
+      <b>02</b>
+      <span>ADMIN REVIEWS & UPDATES STATUS</span>
+    </div>
+    <div class="stat">
+      <b>03</b>
+      <span>ISSUE GETS RESOLVED</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="heading">
+    <h2>WHAT YOU CAN REPORT.</h2>
+    <span class="number">02</span>
+  </div>
+  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+    <div class="stat"><b>🏠</b><span>HOSTEL</span></div>
+    <div class="stat"><b>📚</b><span>ACADEMIC</span></div>
+    <div class="stat"><b>🍽</b><span>CANTEEN</span></div>
+    <div class="stat"><b>📶</b><span>IT / WI-FI</span></div>
+  </div>
+</section>
+
+{% endblock %}

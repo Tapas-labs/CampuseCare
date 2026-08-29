@@ -23,7 +23,7 @@ DB_PATH = os.path.join(BASE_DIR, "campuscare.db")
 SCHEMA_PATH = os.path.join(BASE_DIR, "schema.sql")
 
 app = Flask(__name__)
-app.secret_key = "campuscare-dev-secret-key-change-me"  # fine for a college mini-project
+app.secret_key = os.environ.get("SECRET_KEY", "campuscare-dev-secret-key-change-me")
 
 CATEGORIES = ["Hostel", "Academic", "Canteen", "Infrastructure", "IT / Wi-Fi", "Library", "Transport", "Other"]
 STATUSES = ["Pending", "In Progress", "Resolved", "Rejected"]
@@ -314,6 +314,12 @@ def update_complaint(complaint_id):
 
 
 # ---------------------------------------------------------------
+# Initialize the database as soon as the module loads. This runs
+# whether the app is started with `python app.py` (local dev) or
+# with a WSGI server like gunicorn (used on Render/production).
+init_db()
+
 if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug_mode = os.environ.get("FLASK_DEBUG", "1") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)

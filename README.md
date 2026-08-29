@@ -57,7 +57,7 @@ CampusCare/
 
 1. **Clone the repo & move into it**
    ```bash
-   git clone https://github.com/Tapas-labs/CampuseCare
+   git clone <your-repo-url>
    cd CampusCare
    ```
 

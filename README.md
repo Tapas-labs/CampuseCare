@@ -52,37 +52,6 @@ CampusCare/
     ├── student_dashboard.html
     └── admin_dashboard.html
 ```
-
-## How to Run
-
-1. **Clone the repo & move into it**
-   ```bash
-   git clone https://github.com/Tapas-labs/CampuseCare
-   cd CampusCare
-   ```
-
-2. **Create a virtual environment (recommended)**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate     # Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Run the app**
-   ```bash
-   python app.py
-   ```
-   The database (`campuscare.db`) is created automatically on first run, along with a default admin account.
-
-5. **Open in browser**
-   ```
-   http://127.0.0.1:5000
-   ```
-
 ## Default Admin Login
 
 ```
@@ -97,14 +66,6 @@ Students register their own accounts from the **Sign Up** page.
 **users** — `id, name, email, password (hashed), role (student/admin), enrollment_no, department, created_at`
 
 **complaints** — `id, student_id (FK → users), title, category, description, priority, status, admin_remarks, created_at, updated_at`
-
-## Notes for the Viva / Report
-
-- Passwords are never stored in plain text — `werkzeug.security` hashes them (PBKDF2).
-- SQL queries use parameterized statements (`?` placeholders) to prevent SQL injection.
-- Sessions (Flask `session`) track logged-in users; role-based route protection stops students from reaching admin pages and vice versa.
-- The database is a single SQLite file (`campuscare.db`), so no external DB server setup is needed — ideal for a college project / GitHub submission.
-- All styling is hand-written CSS (no Bootstrap/Tailwind), using CSS variables for the comic-book palette.
 
 ## Possible Future Enhancements
 
